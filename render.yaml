@@ -1,0 +1,12 @@
+# render.yaml SANS les passwords
+services:
+  - type: web
+    name: buv-essc
+    plan: free
+    docker:
+      dockerfile: Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: APP_SECRET
+        generateValue: true
