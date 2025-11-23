@@ -22,23 +22,6 @@ class SpaController extends AbstractController
     //     }
 
 
-    #[Route('/test-mail', name: 'test_mail')]
-    public function test(MailerInterface $mailer)
-    {
-        $email = (new Email())
-            ->from($_ENV['MAIL_FROM'])
-            ->to('dsmoonweb@gmail.com')
-            ->subject('Test Mail Brevo')
-            ->text('Si tu reçois ce mail, Brevo fonctionne.');
-
-        try {
-            $mailer->send($email);
-            return new Response("Email envoyé !");
-        } catch (\Throwable $e) {
-            return new Response("Erreur: " . $e->getMessage());
-        }
-    }
-
     // Catch-all exclut route API
     #[Route('/{path}', name: 'spa', requirements: ['path' => '^(?!api).+'])]
     public function index(string $path = ''): Response

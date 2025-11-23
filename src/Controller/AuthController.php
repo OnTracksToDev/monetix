@@ -26,6 +26,13 @@ class AuthController extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator
     ): JsonResponse {
+
+        // 🔐 Vérification clé secrète
+        $secret = $request->headers->get('X-REGISTRATION-KEY');
+        if ($secret !== $_ENV['REGISTER_SECRET']) {
+            return new JsonResponse(['error' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), true);
 
         $user = new User();
@@ -56,7 +63,7 @@ class AuthController extends AbstractController
         SerializerInterface $serializer
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        
+
         $email = $data['email'] ?? '';
         $password = $data['password'] ?? '';
 
@@ -66,7 +73,7 @@ class AuthController extends AbstractController
 
         // Recherche de l'utilisateur
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-        
+
         if (!$user || !$jwtAuthService->verifyCredentials($user, $password)) {
             return new JsonResponse(['error' => 'Identifiants invalides'], Response::HTTP_UNAUTHORIZED);
         }
@@ -84,7 +91,7 @@ class AuthController extends AbstractController
     public function me(SerializerInterface $serializer): JsonResponse
     {
         $user = $this->getUser();
-        
+
         if (!$user) {
             return new JsonResponse(['error' => 'Non authentifié'], Response::HTTP_UNAUTHORIZED);
         }
