@@ -28,7 +28,7 @@
                         <div class="text-warning fw-bold fs-4">
                             {{ totalCredits }} €
                         </div>
-                        <small class="text-muted">En attente</small>
+                        <small class="text-muted">Crédits</small>
                     </div>
                 </div>
             </div>
@@ -191,6 +191,7 @@ export default {
     data() {
         return {
             ventes: [],
+            adherents: [],
             filters: {
                 period: "24h",
             },
@@ -211,9 +212,10 @@ export default {
         },
 
         totalCredits() {
-            return this.ventesFiltrees
+            return this.adherents
                 .reduce(
-                    (sum, vente) => sum + parseFloat(vente.reste_a_payer),
+                    (sum, adherent) =>
+                        sum + parseFloat(adherent.credit_total || 0),
                     0
                 )
                 .toFixed(2);
@@ -222,6 +224,7 @@ export default {
 
     async mounted() {
         await this.chargerVentes();
+        await this.chargerAdherents();
     },
 
     methods: {
@@ -235,6 +238,17 @@ export default {
                 console.error("Erreur:", error);
             } finally {
                 this.loading = false;
+            }
+        },
+
+        async chargerAdherents() {
+            try {
+                const response = await authFetch("/api/adherents");
+                if (!response.ok)
+                    throw new Error("Erreur chargement adhérents");
+                this.adherents = await response.json();
+            } catch (error) {
+                console.error("Erreur chargement adhérents:", error);
             }
         },
 

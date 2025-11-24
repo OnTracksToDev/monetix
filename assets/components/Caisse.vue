@@ -44,29 +44,64 @@
                 </div>
             </div>
 
-            <!-- RÉSUMÉ VISUEL SIMPLE -->
+            <!-- SITUATION FINANCIÈRE -->
             <div class="card mb-4">
                 <div class="card-body p-4">
                     <h4 class="fw-bold mb-4">
-                        <i class="bi bi-graph-up me-2"></i>Situation
+                        <i class="bi bi-calculator me-2"></i>Situation
+                        financière
                     </h4>
 
-                    <!-- ENTREES -->
+                    <!-- CHIFFRE D'AFFAIRES -->
                     <div
-                        class="d-flex justify-content-between align-items-center mb-3 p-3 bg-success bg-opacity-10 rounded"
+                        class="d-flex justify-content-between align-items-center mb-3 p-3 bg-primary bg-opacity-10 rounded"
                     >
                         <div class="d-flex align-items-center">
                             <i
-                                class="bi bi-arrow-down-left text-success fs-4 me-3"
+                                class="bi bi-graph-up-arrow text-primary fs-4 me-3"
                             ></i>
-                            <span class="fs-5">Argent entré</span>
+                            <div>
+                                <div class="fs-5 fw-bold">
+                                    Chiffre d'affaires
+                                </div>
+                                <small class="text-muted"
+                                    >Total des ventes (tournée(s) en cours
+                                    comprises)
+                                </small>
+                            </div>
                         </div>
-                        <strong class="text-success fs-4"
-                            >{{ totalEncaissements }} €</strong
+                        <strong class="text-primary fs-4"
+                            >{{ totalVentes }} €</strong
                         >
                     </div>
 
-                    <!-- SORTIES -->
+                    <!-- DÉCOMPOSITION DU CHIFFRE D'AFFAIRES -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div
+                                class="bg-success bg-opacity-10 rounded p-2 text-center"
+                            >
+                                <small class="text-muted">Total Encaissé</small>
+                                <div class="fw-bold text-success">
+                                    {{ totalEncaissements }} €
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div
+                                class="bg-warning bg-opacity-10 rounded p-2 text-center"
+                            >
+                                <small class="text-muted"
+                                    >Total Crédits adhérents</small
+                                >
+                                <div class="fw-bold text-warning">
+                                    {{ totalCredits }} €
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DÉPENSES RÉELLES -->
                     <div
                         class="d-flex justify-content-between align-items-center mb-3 p-3 bg-danger bg-opacity-10 rounded"
                     >
@@ -74,14 +109,41 @@
                             <i
                                 class="bi bi-arrow-up-right text-danger fs-4 me-3"
                             ></i>
-                            <span class="fs-5">Argent sorti</span>
+                            <div>
+                                <div class="fs-5 fw-bold">Dépenses réelles</div>
+                                <small class="text-muted"
+                                    >Dépenses déjà effectuées</small
+                                >
+                            </div>
                         </div>
                         <strong class="text-danger fs-4"
-                            >{{ totalDepenses }} €</strong
+                            >- {{ totalDepenses }} €</strong
                         >
                     </div>
 
-                    <!-- BÉNÉFICE -->
+                    <!-- DETTES GESTIONNAIRES (OBLIGATIONS FUTURES) -->
+                    <div
+                        class="d-flex justify-content-between align-items-center mb-3 p-3 bg-warning bg-opacity-10 rounded"
+                    >
+                        <div class="d-flex align-items-center">
+                            <i
+                                class="bi bi-cash-coin text-warning fs-4 me-3"
+                            ></i>
+                            <div>
+                                <div class="fs-5 fw-bold">
+                                    Dettes gestionnaires
+                                </div>
+                                <small class="text-muted"
+                                    >Montant à rembourser</small
+                                >
+                            </div>
+                        </div>
+                        <strong class="text-warning fs-4"
+                            >- {{ totalDettesGestionnaires }} €</strong
+                        >
+                    </div>
+
+                    <!-- BÉNÉFICE NET-->
                     <div
                         class="d-flex justify-content-between align-items-center p-3 rounded fw-bold fs-5"
                         :class="
@@ -99,48 +161,17 @@
                                 "
                                 class="me-3"
                             ></i>
-                            <span>Bénéfice</span>
+                            <span>Bénéfice net</span>
                         </div>
                         <strong>{{ beneficeNet }} €</strong>
                     </div>
-                </div>
-            </div>
 
-            <!-- VENTES -->
-            <div class="card mb-4">
-                <div class="card-body p-4">
-                    <h4 class="fw-bold mb-4">
-                        <i class="bi bi-cart-check me-2"></i>Ventes
-                    </h4>
-                    <div class="row g-3 text-center">
-                        <div class="col-4">
-                            <div class="border rounded p-3">
-                                <div class="fw-bold text-primary fs-4">
-                                    {{ totalVentes }} €
-                                </div>
-                                <small class="text-muted fs-6">Total</small>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="border rounded p-3 bg-success bg-opacity-10"
-                            >
-                                <div class="fw-bold text-success fs-4">
-                                    {{ totalEncaissements }} €
-                                </div>
-                                <small class="text-muted fs-6">Payé</small>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div
-                                class="border rounded p-3 bg-warning bg-opacity-10"
-                            >
-                                <div class="fw-bold text-warning fs-4">
-                                    {{ totalCredits }} €
-                                </div>
-                                <small class="text-muted fs-6">Dû</small>
-                            </div>
-                        </div>
+                    <!-- LÉGENDE -->
+                    <div class="mt-3 text-center">
+                        <small class="text-muted">
+                            Bénéfice = Chiffre d'affaires - (Dépenses + Dettes
+                            gestionnaires)
+                        </small>
                     </div>
                 </div>
             </div>
@@ -701,6 +732,7 @@ export default {
         return {
             ventes: [],
             mouvements: [],
+            adherents: [],
             caisseReelle: "",
             loading: true,
             refreshing: false,
@@ -747,9 +779,10 @@ export default {
                 .toFixed(2);
         },
         totalCredits() {
-            return this.ventes
+            return this.adherents
                 .reduce(
-                    (sum, vente) => sum + parseFloat(vente.reste_a_payer || 0),
+                    (sum, adherent) =>
+                        sum + parseFloat(adherent.credit_total || 0),
                     0
                 )
                 .toFixed(2);
@@ -764,8 +797,9 @@ export default {
         },
         beneficeNet() {
             const benefice =
-                parseFloat(this.totalEncaissements) -
-                parseFloat(this.totalDepenses);
+                parseFloat(this.totalVentes) -
+                (parseFloat(this.totalDepenses) +
+                    parseFloat(this.totalDettesGestionnaires));
             return benefice.toFixed(2);
         },
         ecart() {
@@ -869,11 +903,26 @@ export default {
             try {
                 await this.chargerVentes();
                 await this.chargerMouvements();
+                await this.chargerAdherents();
             } catch (error) {
                 console.error("Erreur chargement:", error);
                 this.$toast.error("Erreur chargement");
             } finally {
                 this.loading = false;
+            }
+        },
+
+        async chargerAdherents() {
+            try {
+                const response = await authFetch("/api/adherents");
+                if (response.ok) {
+                    this.adherents = await response.json();
+                } else {
+                    throw new Error("Erreur API adhérents");
+                }
+            } catch (error) {
+                console.error("Erreur chargement adhérents:", error);
+                throw error;
             }
         },
 
