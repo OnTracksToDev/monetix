@@ -23,6 +23,12 @@
                     <h4 class="fw-bold mb-3">
                         <i class="bi bi-calculator me-2"></i>Comptage caisse
                     </h4>
+
+                    <!-- Indication de l'argent théorique -->
+                    <div class="mb-2 text-muted fs-6">
+                        Argent théorique : {{ argentTheoriqueCaisse }} €
+                    </div>
+
                     <input
                         v-model="caisseReelle"
                         type="number"
@@ -44,6 +50,16 @@
                 </div>
             </div>
 
+            <!-- EXPLICATION DU CALCUL -->
+            <div class="card mb-4">
+                <div class="card-body p-2 text-center">
+                    <small class="text-muted">
+                        <strong>Argent théorique :</strong><br />
+                        Encaissements ({{ totalEncaissements }} €) - Dépenses
+                        ({{ totalDepenses }} €) = {{ argentTheoriqueCaisse }} €
+                    </small>
+                </div>
+            </div>
             <!-- SITUATION FINANCIÈRE -->
             <div class="card mb-4">
                 <div class="card-body p-4">
@@ -787,6 +803,7 @@ export default {
                 )
                 .toFixed(2);
         },
+
         totalDepenses() {
             const depenses = this.mouvements
                 .filter(
@@ -795,6 +812,22 @@ export default {
                 .reduce((sum, m) => sum + parseFloat(m.montant || 0), 0);
             return depenses.toFixed(2);
         },
+
+        argentTheoriqueCaisse() {
+            const encaissements = parseFloat(this.totalEncaissements);
+            const depensesEtRemboursements = parseFloat(this.totalDepenses);
+
+            return (encaissements - depensesEtRemboursements).toFixed(2);
+        },
+
+        ecart() {
+            if (!this.caisseReelle) return 0;
+            return (
+                parseFloat(this.caisseReelle) -
+                parseFloat(this.argentTheoriqueCaisse)
+            ).toFixed(2);
+        },
+
         beneficeNet() {
             const benefice =
                 parseFloat(this.totalVentes) -
@@ -802,13 +835,7 @@ export default {
                     parseFloat(this.totalDettesGestionnaires));
             return benefice.toFixed(2);
         },
-        ecart() {
-            if (!this.caisseReelle) return 0;
-            return (
-                parseFloat(this.caisseReelle) -
-                parseFloat(this.totalEncaissements)
-            ).toFixed(2);
-        },
+
         totalDettesGestionnaires() {
             const avances = this.mouvements.filter(
                 (m) => m.type === "avance" && !m.rembourse
